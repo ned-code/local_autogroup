@@ -219,7 +219,8 @@ class autogroup_set extends domain
         $this->update_timestamps();
 
         $data = $this->as_object();
-        $data->sortconfig = json_encode($data->sortconfig);
+        $sortdata = (object) ['sortconfig' => $data->sortconfig, 'cleanupold' => $cleanupold];
+        $data->sortconfig = json_encode($sortdata);
         if($this->exists()){
             $db->update_record('local_autogroup_set', $data);
         }
@@ -320,6 +321,13 @@ class autogroup_set extends domain
         }
 
         return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function is_cleanupold(){
+        return $this->cleanupold;
     }
 
     /**
@@ -462,7 +470,14 @@ class autogroup_set extends domain
         if(isset($autogroupset->sortconfig)) {
             $sortconfig = json_decode($autogroupset->sortconfig);
             if(json_last_error() == JSON_ERROR_NONE) {
-                $this->sortconfig = $sortconfig;
+                // in old records here only data for sortconfig, in new - for sortconfig & cleanupold
+                if (isset($sortconfig->sortconfig) && isset($sortconfig->cleanupold)){
+                    $this->cleanupold = $sortconfig->cleanupold;
+                    $this->sortconfig = $sortconfig->sortconfig;
+                } else {
+                    $this->sortconfig = $sortconfig;
+                }
+
             }
         }
 
@@ -655,6 +670,11 @@ class autogroup_set extends domain
      * @var stdClass
      */
     protected $sortconfig;
+
+    /**
+     * @var bool
+     */
+    protected $cleanupold = true;
 
     /**
      * @var int

@@ -150,7 +150,7 @@ if ($data = $form->get_data()) {
         $options = new stdClass();
         $options->field = $data->groupby;
 
-        if ($options->field != $groupset->grouping_by()) {
+        if ($options->field != $groupset->grouping_by() || $groupset->is_cleanupold() != $cleanupold) {
             // user has selected another option
             $groupset->set_options($options);
             $groupset->save($DB, $cleanupold);

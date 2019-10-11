@@ -91,7 +91,8 @@ class autogroup_set_settings extends form {
         if($this->_customdata->exists()) {
             //offer to preserve existing groups
             $mform->addElement('selectyesno', 'cleanupold', get_string('cleanupold','local_autogroup'));
-            $mform->setDefault('cleanupold', 1);
+            $mform->setDefault('cleanupold', $this->_customdata->is_cleanupold());
+
         }
     }
 
