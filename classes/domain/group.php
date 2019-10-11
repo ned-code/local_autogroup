@@ -238,7 +238,7 @@ class group extends domain
      */
     protected $attributes = array(
         'id','courseid','idnumber','name', 'description', 'descriptionformat',
-        'enrolmentkey','picture','hidepicture','timecreated','timemodified'
+        'enrolmentkey','picture','hidepicture','timecreated','timemodified', 'schedule'
     );
 
     /**
@@ -289,6 +289,11 @@ class group extends domain
      * @var int
      */
     protected $timemodified = 0;
+
+    /**
+     * @var int
+     */
+    protected $schedule = 0;
 
     /**
      * List of members for this group

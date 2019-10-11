@@ -414,6 +414,7 @@ class autogroup_set extends domain
         $data->enrolmentkey = null;
         $data->picture = 0;
         $data->hidepicture = 0;
+        $data->schedule = 0;
 
         try {
             $newgroup = new domain\group($data, $db);
