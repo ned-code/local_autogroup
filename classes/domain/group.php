@@ -72,8 +72,12 @@ class group extends domain
     }
 
     /**
+     * Return true, if function make member a user, false otherwise (if user is a member already)
+     *
      * @param int $userid
+     *
      * @return bool
+     * @throws \coding_exception
      */
     public function ensure_user_is_member($userid){
         foreach($this->members as $member){
@@ -88,6 +92,8 @@ class group extends domain
     }
 
     /**
+     * Return true, if function remove member from group, false otherwise (if user isn't a member already)
+     *
      * @param int $userid
      * @return bool
      */
