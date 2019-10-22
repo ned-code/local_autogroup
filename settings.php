@@ -77,8 +77,16 @@ if ($hassiteconfig) {
     );
     $settings->add(
         new admin_setting_configcheckbox(
-            'local_autogroup/preservemanual',
-            get_string('preservemanual', 'local_autogroup'),
+            'local_autogroup/preserve_addmanual',
+            get_string('preserve_addmanual', 'local_autogroup'),
+            '',
+            1
+        )
+    );
+    $settings->add(
+        new admin_setting_configcheckbox(
+            'local_autogroup/preserve_remmanual',
+            get_string('preserve_remmanual', 'local_autogroup'),
             '',
             1
         )

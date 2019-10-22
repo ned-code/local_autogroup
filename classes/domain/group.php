@@ -78,8 +78,20 @@ class group extends domain
      *
      * @return bool
      * @throws \coding_exception
+     * @throws \dml_exception
      */
     public function ensure_user_is_member($userid){
+
+        // Do not allow autogroup to add this User if they were manually removed from group.
+        global $DB;
+        $pluginconfig = get_config('local_autogroup');
+
+        if($pluginconfig->preserve_remmanual) {
+            if($DB->record_exists('local_autogroup_manual', array('userid' => $userid, 'groupid' => $this->id))) {
+                return false;
+            }
+        }
+
         foreach($this->members as $member){
             if ($member == $userid) {
                 return false;
@@ -95,16 +107,19 @@ class group extends domain
      * Return true, if function remove member from group, false otherwise (if user isn't a member already)
      *
      * @param int $userid
+     *
      * @return bool
+     * @throws \dml_exception
      */
     public function ensure_user_is_not_member($userid){
 
         // Do not allow autogroup to remove this User if they were manually assigned to group.
+        global $DB;
         $pluginconfig = get_config('local_autogroup');
-        if($pluginconfig->preservemanual) {
-            global $DB;
+
+        if($pluginconfig->preserve_addmanual) {
             if($DB->record_exists('local_autogroup_manual', array('userid' => $userid, 'groupid' => $this->id))) {
-                return;
+                return false;
             }
         }
 

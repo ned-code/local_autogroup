@@ -82,18 +82,19 @@ class event_handler
         // Add to manually assigned list (local_autogroup_manual).
         $userid = (int) $event->relateduserid;
         $groupid = (int) $event->objectid;
+        $courseid = (int) $event->courseid;
+        $params = ['userid' => $userid, 'groupid' => $groupid];
 
-        if(!$DB->record_exists('local_autogroup_manual', array('userid' => $userid, 'groupid' => $groupid))) {
-            $record = (object) array('userid' => $userid, 'groupid' => $groupid);
-            $DB->insert_record('local_autogroup_manual', $record);
+        $manual_record = $DB->record_exists('local_autogroup_manual', $params);
+        if ($pluginconfig->preserve_addmanual && !$manual_record){
+            $DB->insert_record('local_autogroup_manual', (object) $params);
+        } elseif (!$pluginconfig->preserve_addmanual && $manual_record){
+            $DB->delete_records('local_autogroup_manual', $params);
         }
 
         if(!$pluginconfig->listenforgroupmembership){
             return false;
         }
-
-        $courseid = (int) $event->courseid;
-        $userid = (int) $event->relateduserid;
 
         $usecase = new usecase\verify_user_group_membership($userid, $DB, $courseid);
         return $usecase();
@@ -116,14 +117,15 @@ class event_handler
         // Remove from manually assigned list (local_autogroup_manual).
         $userid = (int) $event->relateduserid;
         $groupid = (int) $event->objectid;
-
-        if($DB->record_exists('local_autogroup_manual', array('userid' => $userid, 'groupid' => $groupid))) {
-            $DB->delete_records('local_autogroup_manual', array('userid' => $userid, 'groupid' => $groupid));
-        }
-
-        $groupid = (int) $event->objectid;
         $courseid = (int) $event->courseid;
-        $userid = (int) $event->relateduserid;
+        $params = ['userid' => $userid, 'groupid' => $groupid];
+
+        $manual_record = $DB->record_exists('local_autogroup_manual', $params);
+        if ($pluginconfig->preserve_remmanual && !$manual_record){
+            $DB->insert_record('local_autogroup_manual', (object) $params);
+        } elseif (!$pluginconfig->preserve_remmanual && $manual_record){
+            $DB->delete_records('local_autogroup_manual', $params);
+        }
 
         if($pluginconfig->listenforgroupmembership) {
             $usecase1 = new usecase\verify_user_group_membership($userid, $DB, $courseid);

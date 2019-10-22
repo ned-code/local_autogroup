@@ -29,7 +29,7 @@
                 <KEY NAME="roleid" TYPE="foreign" FIELDS="roleid" REFTABLE="role" REFFIELDS="id"/>
             </KEYS>
         </TABLE>
-        <TABLE NAME="local_autogroup_manual" COMMENT="Tracks manually assigned Users to autogroup groups">
+        <TABLE NAME="local_autogroup_manual" COMMENT="Tracks manually added/removed Users to/from autogroup groups">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
                 <FIELD NAME="groupid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Group ID of this record."/>
